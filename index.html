@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .stats-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-btn {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .difficulty-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .difficulty-btn.easy {
+            border-color: #667eea;
+        }
+
+        .difficulty-btn.medium {
+            border-color: #f59e0b;
+        }
+
+        .difficulty-btn.hard {
+            border-color: #ef4444;
+        }
+
+        .difficulty-info {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .game-area {
+            text-align: center;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-text {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #667eea;
+            height: 100%;
+            width: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .input-area {
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-guess {
+            background: #667eea;
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .btn-guess:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-hint {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-hint:hover {
+            background: #d97706;
+        }
+
+        .btn-quit {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-quit:hover {
+            background: #dc2626;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.correct {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+
+        .message.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .message.hint {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .hint-text {
+            font-size: 0.95em;
+            margin-top: 10px;
+        }
+
+        .result-screen {
+            text-align: center;
+        }
+
+        .result-emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .result-details {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .result-details strong {
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .difficulty-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stats-header {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .reset-stats-btn {
+            width: 100%;
+            background: #e5e7eb;
+            color: #333;
+            padding: 10px;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+
+        .reset-stats-btn:hover {
+            background: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="emoji">🎮</div>
+            <h1>Guess The Number</h1>
+            <p class="subtitle">Test your luck and intuition!</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-box">
+            <div class="stats-header">📊 Your Statistics</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Games Played</div>
+                    <div class="stat-value" id="totalGames">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Games Won</div>
+                    <div class="stat-value" id="gamesWon">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Best Score</div>
+                    <div class="stat-value" id="bestScore">-</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value" id="winRate">0%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Hints</div>
+                    <div class="stat-value" id="totalHints">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Avg Attempts</div>
+                    <div class="stat-value" id="avgAttempts">-</div>
+                </div>
+            </div>
+            <button class="reset-stats-btn" onclick="game.resetStats()">🔄 Reset Stats</button>
+        </div>
+
+        <!-- Difficulty Selection -->
+        <div class="section active" id="difficultySection">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Choose Difficulty Level</h2>
+            <div class="difficulty-grid">
+                <button class="difficulty-btn easy" onclick="game.selectDifficulty('easy')">
+                    <div style="font-size: 1.5em; margin-bottom: 5px;">🟢</div>
+                    <strong>EASY</strong>
+                    <div class="difficulty-info">1-50<br>10 attempts<br>3 hints</div>
+                </button>
+                <button class="difficulty-btn medium" onclick="game.selectDifficulty('medium')">
+                    <div style="font-size: 1.5em; margin-bottom: 5px;">🟡</div>
+                    <strong>MEDIUM</strong>
+                    <div class="difficulty-info">1-100<br>7 attempts<br>2 hints</div>
+                </button>
+                <button class="difficulty-btn hard" onclick="game.selectDifficulty('hard')">
+                    <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                    <strong>HARD</strong>
+                    <div class="difficulty-info">1-200<br>5 attempts<br>1 hint</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Section -->
+        <div class="section" id="gameSection">
+            <div class="game-area">
+                <div class="info-box">
+                    <div class="info-text" id="gameInfo"></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="message" id="message"></div>
+
+                <div class="input-area">
+                    <input type="number" id="guessInput" placeholder="Enter your guess..." min="1">
+                    <div class="button-group">
+                        <button class="btn-guess" onclick="game.makeGuess()">🎯 Guess</button>
+                        <button class="btn-hint" onclick="game.getHint()">💡 Hint</button>
+                        <button class="btn-quit" onclick="game.quit()">❌ Quit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="section" id="resultSection">
+            <div class="result-screen">
+                <div class="result-emoji" id="resultEmoji"></div>
+                <div class="result-title" id="resultTitle"></div>
+                <div class="result-details" id="resultDetails"></div>
+                <button class="btn-primary" onclick="game.playAgain()" style="width: 100%; margin-bottom: 10px;">
+                    🎮 Play Again
+                </button>
+                <button class="btn-secondary" onclick="location.reload()" style="width: 100%;">
+                    🏠 Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const game = {
+            secretNumber: null,
+            attempts: 0,
+            maxAttempts: 10,
+            hintsUsed: 0,
+            maxHints: 3,
+            difficulty: null,
+            range: 50,
+            stats: {
+                totalGames: 0,
+                gamesWon: 0,
+                bestScore: Infinity,
+                totalHints: 0,
+                totalAttempts: 0
+            },
+
+            init() {
+                this.loadStats();
+                this.updateStatsDisplay();
+            },
+
+            loadStats() {
+                const saved = localStorage.getItem('guessGameStats');
+                if (saved) {
+                    this.stats = JSON.parse(saved);
+                }
+            },
+
+            saveStats() {
+                localStorage.setItem('guessGameStats', JSON.stringify(this.stats));
+            },
+
+            updateStatsDisplay() {
+                document.getElementById('totalGames').textContent = this.stats.totalGames;
+                document.getElementById('gamesWon').textContent = this.stats.gamesWon;
+                document.getElementById('bestScore').textContent = this.stats.bestScore === Infinity ? '-' : this.stats.bestScore;
+                
+                const winRate = this.stats.totalGames === 0 ? 0 : Math.round((this.stats.gamesWon / this.stats.totalGames) * 100);
+                document.getElementById('winRate').textContent = winRate + '%';
+                
+                document.getElementById('totalHints').textContent = this.stats.totalHints;
+                
+                const avgAttempts = this.stats.totalGames === 0 ? '-' : (this.stats.totalAttempts / this.stats.totalGames).toFixed(1);
+                document.getElementById('avgAttempts').textContent = avgAttempts;
+            },
+
+            selectDifficulty(level) {
+                this.difficulty = level;
+                const difficulties = {
+                    easy: { range: 50, attempts: 10, hints: 3 },
+                    medium: { range: 100, attempts: 7, hints: 2 },
+                    hard: { range: 200, attempts: 5, hints: 1 }
+                };
+
+                const settings = difficulties[level];
+                this.range = settings.range;
+                this.maxAttempts = settings.attempts;
+                this.maxHints = settings.hints;
+                this.attempts = 0;
+                this.hintsUsed = 0;
+
+                this.secretNumber = Math.floor(Math.random() * this.range) + 1;
+
+                this.showSection('gameSection');
+                this.updateGameInfo();
+                this.clearMessage();
+                document.getElementById('guessInput').focus();
+            },
+
+            showSection(sectionId) {
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+            },
+
+            updateGameInfo() {
+                const attemptsLeft = this.maxAttempts - this.attempts;
+                const hintsLeft = this.maxHints - this.hintsUsed;
+                document.getElementById('gameInfo').innerHTML = `
+                    🎯 Guess a number between <strong>1</strong> and <strong>${this.range}</strong><br>
+                    Attempts left: <strong>${attemptsLeft}</strong> | Hints left: <strong>${hintsLeft}</strong>
+                `;
+                
+                const progress = ((this.attempts / this.maxAttempts) * 100);
+                document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
+            },
+
+            makeGuess() {
+                const input = document.getElementById('guessInput');
+                const guess = parseInt(input.value);
+
+                if (!input.value) {
+                    this.showMessage('Please enter a number!', 'incorrect');
+                    return;
+                }
+
+                if (isNaN(guess) || guess < 1 || guess > this.range) {
+                    this.showMessage(`Please enter a number between 1 and ${this.range}!`, 'incorrect');
+                    return;
+                }
+
+                this.attempts++;
+                input.value = '';
+
+                if (guess === this.secretNumber) {
+                    this.win();
+                } else if (guess < this.secretNumber) {
+                    this.showMessage('📈 Too low! Try a higher number.', 'incorrect');
+                    this.updateGameInfo();
+                } else {
+                    this.showMessage('📉 Too high! Try a lower number.', 'incorrect');
+                    this.updateGameInfo();
+                }
+
+                if (this.attempts >= this.maxAttempts && guess !== this.secretNumber) {
+                    setTimeout(() => this.lose(), 1500);
+                }
+            },
+
+            getHint() {
+                if (this.hintsUsed >= this.maxHints) {
+                    this.showMessage(`❌ No more hints! You've used all ${this.maxHints}.`, 'incorrect');
+                    return;
+                }
+
+                const hints = [
+                    `💡 The number is ${this.secretNumber % 2 === 0 ? 'even' : 'odd'}`,
+                    `💡 The number is ${this.secretNumber < this.range / 2 ? 'less than' : 'greater than'} ${Math.floor(this.range / 2)}`,
+                    `💡 The number is between ${Math.max(1, this.secretNumber - 10)} and ${Math.min(this.range, this.secretNumber + 10)}`
+                ];
+
+                this.hintsUsed++;
+                this.showMessage(hints[this.hintsUsed - 1], 'hint');
+                this.updateGameInfo();
+            },
+
+            showMessage(text, type) {
+                const msg = document.getElementById('message');
+                msg.textContent = text;
+                msg.className = `message show ${type}`;
+            },
+
+            clearMessage() {
+                document.getElementById('message').classList.remove('show');
+            },
+
+            win() {
+                this.stats.totalGames++;
+                this.stats.gamesWon++;
+                this.stats.totalHints += this.hintsUsed;
+                this.stats.totalAttempts += this.attempts;
+
+                if (this.attempts < this.stats.bestScore) {
+                    this.stats.bestScore = this.attempts;
+                }
+
+                this.saveStats();
+
+                setTimeout(() => {
+                    this.showSection('resultSection');
+                    document.getElementById('resultEmoji').textContent = '🎉';
+                    document.getElementById('resultTitle').textContent = 'YOU WON!';
+                    document.getElementById('resultDetails').innerHTML = `
+                        <strong>🎯 Secret Number:</strong> ${this.secretNumber}<br>
+                        <strong>📊 Attempts:</strong> ${this.attempts}/${this.maxAttempts}<br>
+                        <strong>💡 Hints Used:</strong> ${this.hintsUsed}/${this.maxHints}<br>
+                        ${this.attempts <= 3 ? '<strong style="color: #22c55e;">⭐ Excellent score!</strong>' : ''}
+                    `;
+                }, 500);
+            },
+
+            lose() {
+                this.stats.totalGames++;
+                this.stats.totalHints += this.hintsUsed;
+                this.stats.totalAttempts += this.attempts;
+                this.saveStats();
+
+                this.showSection('resultSection');
+                document.getElementById('resultEmoji').textContent = '😢';
+                document.getElementById('resultTitle').textContent = 'GAME OVER!';
+                document.getElementById('resultDetails').innerHTML = `
+                    <strong>🎯 The Number Was:</strong> ${this.secretNumber}<br>
+                    <strong>📊 Your Attempts:</strong> ${this.attempts}/${this.maxAttempts}<br>
+                    <strong>💡 Hints Used:</strong> ${this.hintsUsed}/${this.maxHints}<br>
+                    Better luck next time! 💪
+                `;
+            },
+
+            quit() {
+                if (confirm('Are you sure you want to quit this game?')) {
+                    this.stats.totalGames++;
+                    this.stats.totalHints += this.hintsUsed;
+                    this.stats.totalAttempts += this.attempts;
+                    this.saveStats();
+
+                    this.showSection('resultSection');
+                    document.getElementById('resultEmoji').textContent = '👋';
+                    document.getElementById('resultTitle').textContent = 'YOU QUIT!';
+                    document.getElementById('resultDetails').innerHTML = `
+                        <strong>🎯 The Number Was:</strong> ${this.secretNumber}<br>
+                        <strong>📊 Attempts Made:</strong> ${this.attempts}/${this.maxAttempts}
+                    `;
+                }
+            },
+
+            playAgain() {
+                this.updateStatsDisplay();
+                this.showSection('difficultySection');
+            },
+
+            resetStats() {
+                if (confirm('Are you sure? This will clear all your statistics!')) {
+                    this.stats = {
+                        totalGames: 0,
+                        gamesWon: 0,
+                        bestScore: Infinity,
+                        totalHints: 0,
+                        totalAttempts: 0
+                    };
+                    this.saveStats();
+                    this.updateStatsDisplay();
+                    alert('✅ Stats reset!');
+                }
+            }
+        };
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            game.init();
+            document.getElementById('guessInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') game.makeGuess();
+            });
+        });
+    </script>
+</body>
+</html>
