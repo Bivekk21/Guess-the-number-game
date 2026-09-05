@@ -1,0 +1,390 @@
+/* ========================================
+   GUESS THE NUMBER - CSS STYLING
+   All colors, fonts, spacing, and design
+   ======================================== */
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body & Background */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Main Container */
+.container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* ========================================
+   HEADER SECTION
+   ======================================== */
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.emoji {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1em;
+}
+
+/* ========================================
+   STATISTICS SECTION
+   ======================================== */
+
+.stats-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border-left: 4px solid #667eea;
+}
+
+.stats-header {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.85em;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* ========================================
+   SECTIONS (visibility toggle)
+   ======================================== */
+
+.section {
+    margin-bottom: 30px;
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* ========================================
+   DIFFICULTY SELECTION
+   ======================================== */
+
+.difficulty-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.difficulty-btn {
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+}
+
+.difficulty-btn:hover {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+
+.difficulty-btn.easy {
+    border-color: #667eea;
+}
+
+.difficulty-btn.medium {
+    border-color: #f59e0b;
+}
+
+.difficulty-btn.hard {
+    border-color: #ef4444;
+}
+
+.difficulty-info {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 8px;
+}
+
+/* ========================================
+   GAME AREA
+   ======================================== */
+
+.game-area {
+    text-align: center;
+}
+
+.info-box {
+    background: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border-left: 4px solid #667eea;
+}
+
+.info-text {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    background: #e5e7eb;
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: #667eea;
+    height: 100%;
+    width: 100%;
+    transition: width 0.3s ease;
+}
+
+/* ========================================
+   INPUT & BUTTONS
+   ======================================== */
+
+.input-area {
+    margin-bottom: 20px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.btn-guess {
+    background: #667eea;
+    color: white;
+    grid-column: 1 / -1;
+}
+
+.btn-guess:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+}
+
+.btn-hint {
+    background: #f59e0b;
+    color: white;
+}
+
+.btn-hint:hover {
+    background: #d97706;
+}
+
+.btn-quit {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-quit:hover {
+    background: #dc2626;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5568d3;
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+
+/* ========================================
+   MESSAGES (feedback to player)
+   ======================================== */
+
+.message {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    display: none;
+}
+
+.message.show {
+    display: block;
+}
+
+.message.correct {
+    background: #dcfce7;
+    color: #166534;
+    border-left: 4px solid #22c55e;
+}
+
+.message.incorrect {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+}
+
+.message.hint {
+    background: #fef3c7;
+    color: #92400e;
+    border-left: 4px solid #f59e0b;
+}
+
+.hint-text {
+    font-size: 0.95em;
+    margin-top: 10px;
+}
+
+/* ========================================
+   RESULT SCREEN (Win/Lose)
+   ======================================== */
+
+.result-screen {
+    text-align: center;
+}
+
+.result-emoji {
+    font-size: 4em;
+    margin-bottom: 20px;
+}
+
+.result-title {
+    font-size: 2em;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.result-details {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1.1em;
+}
+
+.result-details strong {
+    color: #333;
+}
+
+/* ========================================
+   RESET BUTTON
+   ======================================== */
+
+.reset-stats-btn {
+    width: 100%;
+    background: #e5e7eb;
+    color: #333;
+    padding: 10px;
+    font-size: 0.9em;
+    margin-top: 15px;
+}
+
+.reset-stats-btn:hover {
+    background: #d1d5db;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN (Mobile)
+   ======================================== */
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .difficulty-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        grid-template-columns: 1fr;
+    }
+}
